@@ -20,9 +20,11 @@ public class Program {
 		System.out.print("Check-out date (dd/MM/yyyy): ");
 		Date checkOut = sdf.parse(digitar.next());
 		
-		if (!checkOut.after(checkIn)) {
+		if (!checkOut.after(checkIn)) 
+		{
 			System.out.println("Rersevation error: Check-out date must be after Check-in date");
-		}else {
+		}else 
+		{
 			Reservation reserva = new Reservation(number,checkIn,checkOut);
 			System.out.println("Reservation: "+reserva);
 			
@@ -33,24 +35,20 @@ public class Program {
 			System.out.print("Check-out date (dd/MM/yyyy): ");
 			checkOut = sdf.parse(digitar.next());
 			
-			Date agora = new Date();
-			if(checkIn.before(agora) || checkOut.before(agora)) {
-				System.out.println("Rersevation error: Check-out date must be after Check-in date");
-			}else if(!checkOut.after(checkIn)) {
-				System.out.println("Rersevation error: Check-out date must be after Check-in date");
-			}else {
-				reserva.updateDates(checkIn, checkOut);
+			String error = reserva.updateDates(checkIn, checkOut);
+			if (error != null) 
+			{
+				System.out.println("Error in reservation: "+error);
+			}else 
+			{
 				System.out.println("Reservation: "+reserva);
 			}
-				
+			
 		}
-		
-		
 		
 		
 		
 		
 		digitar.close();
 	}
-
 }

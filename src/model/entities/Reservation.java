@@ -44,10 +44,19 @@ public class Reservation {
 		//converte o tempo em milisegundos em dias
 		return TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
 	}
-	public void updateDates(Date checkIn, Date checkOut) {
+	public String updateDates(Date checkIn, Date checkOut) {
+		Date agora = new Date();
+		if(checkIn.before(agora) || checkOut.before(agora)) {
+			return "Rersevation dates for update must be future dates";
+		}
+		if(!checkOut.after(checkIn)) {
+			return "Rersevation error: Check-out date must be after Check-in date";
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
+		
 	@Override
 	public String toString() {
 		return "Romm "
