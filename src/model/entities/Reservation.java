@@ -3,6 +3,7 @@ package model.entities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import model.exceptions.DomainException;
 
 public class Reservation {
 	private int roomNumber;
@@ -12,7 +13,10 @@ public class Reservation {
 	// instanciação do tipo data no formato static pois so vai ser feito 1 vez.
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Reservation(int roomNumber, Date checkIn, Date checkOut) {
+	public Reservation(int roomNumber, Date checkIn, Date checkOut) throws DomainException{
+		if(!checkOut.after(checkIn)) {
+			throw new DomainException("Rersevation error: Check-out date must be after Check-in date");
+		}
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -44,17 +48,20 @@ public class Reservation {
 		//converte o tempo em milisegundos em dias
 		return TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
 	}
-	public String updateDates(Date checkIn, Date checkOut) {
+	public void updateDates(Date checkIn, Date checkOut) throws DomainException{
 		Date agora = new Date();
 		if(checkIn.before(agora) || checkOut.before(agora)) {
-			return "Rersevation dates for update must be future dates";
+			//foi instanciada a classe de exceção que ja vem no Java "IllegalArgumentException" 
+			//para mostrar a exceção. 
+			throw new DomainException("Rersevation dates for update must be future dates");
+			// tradução de = "throw new IllegalArgumentException"
+			// lançar nova exceção de argumento ilegal
 		}
 		if(!checkOut.after(checkIn)) {
-			return "Rersevation error: Check-out date must be after Check-in date";
+			throw new DomainException("Rersevation error: Check-out date must be after Check-in date");
 		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 		
 	@Override
